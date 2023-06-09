@@ -54,8 +54,6 @@ abstract class BaseController extends Controller
 
     public function sessiontodb()
     {
-        //if(isset($_GET['PHPSESSID']))
-        //   session_id($_GET['PHPSESSID']);
         $session = \Config\Services::Session();
         $sessionmodel = new SessionModel();
         $data = [
@@ -77,17 +75,23 @@ abstract class BaseController extends Controller
 
     public function questsessiontodb()
     {
-        //if(isset($_GET['PHPSESSID']))
-        //   session_id($_GET['PHPSESSID']);
         $session = \Config\Services::Session();
         $sessionmodel = new QuestSessionModel();
+
+        if($session->get('lat'))
+            $lat = $session->get('lat');
+        if($session->get('lon'))
+            $lon = $session->get('lon');
+
         $data = [
             'session' => $session->get('session'),
             'player' => $session->get('player'),
             'category' => $session->get('category'),
             'mode' => $session->get('mode'),
             'qnum' => $session->get('qnum'),
-            'score' => $session->get('score')
+            'score' => $session->get('score'),
+            'lat' => $lat,
+            'lon' => $lon
         ];
         $sessionmodel->replace($data);
     }

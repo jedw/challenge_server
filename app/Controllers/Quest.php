@@ -48,7 +48,7 @@ class Quest extends BaseController
     public function getriddle()
     {
         $session = $this->startSession();
-        $return = $this->QuestModel->where(['qnum' => $session->get('qnum'), 'category' => $session->get('category')])->first();
+        $return = $this->QuestModel->select('qnum, riddle')->where(['qnum' => $session->get('qnum'), 'category' => $session->get('category')])->first();
         if(!$return)
         {
             $this->questsessionxdb();
@@ -69,7 +69,7 @@ class Quest extends BaseController
        
         if($riddle['solution'] == $solution)
         {
-            $score = $session->get('score') + 1;
+            $score = $session->get('score') + $riddle['points'];
             $qnum = $session->get('qnum') + 1;
             $session->set('score', $score);
             $session->set('qnum', $qnum);
@@ -83,6 +83,31 @@ class Quest extends BaseController
         } 
     }
 
+    public function submitlocation($lat = false, $lon = false)
+    {
+        $session = $this->startSession();
+        $session->set('lat', $lat);
+        $session->set('lon', $lon);
+        $this->questsessiontodb();
+    }
+
+    public function getclue()
+    {
+        $session = $this->startSession();
+        $return = $this->QuestModel->select('hint')->where(['qnum' => $session->get('qnum'), 'category' => $session->get('category')])->first();
+        if(!$return)
+        {
+            $this->questsessionxdb();
+            return $this->response->setJSON(['status' => 0, 'msg' => 'Your have reached the end of the quest, congratulations! ...', 'final score' => $session->get('score')]);
+        }
+        else
+	    {
+            $score = $session->get('score') - 5;
+            $session->set('score', $score);
+            return $this->response->setJSON($return);
+        }
+    }
+
     public function endquest()
     {
         $session = $this->startSession();
@@ -91,4 +116,10 @@ class Quest extends BaseController
         $this->questsessionxdb();
         return $this->response->setJSON(['status' => 0, 'msg' => 'Quest ended, session destroyed']);
     }  
+
+    public function activequests()
+    {
+        $response = $this->SessionModel->findAll();
+        return $this->response->setJSON($response);
+    }
 }

@@ -11,4 +11,22 @@ class Leaderboard extends BaseController
         $response = $LeaderboardModel->findAll();
         return $this->response->setJSON($response);
     }
+
+    public function scorepanel()
+    {
+        return view('scorepanel');
+    }
+    
+    public function addtoscore()
+    {
+        $LeaderboardModel = new LeaderboardModel();
+        $teamcode = $this->request->getPost('teamcode');
+        $pointsawarded = $this->request->getPost('pointsawarded');
+       
+        $LeaderboardModel->set('score', 'score + ' . $LeaderboardModel->escape($pointsawarded), FALSE)
+            ->where('teamcode', $teamcode)
+            ->update(); 
+    }
+
+
 }
