@@ -33,6 +33,13 @@ $routes->setAutoRoute(false);
  * --------------------------------------------------------------------
  */
 
+ // api call to get challenge leader-board
+$routes->get('getleaderboard', 'Leaderboard::getleaderboard');
+
+$routes->get('scorepanel', 'Leaderboard::scorepanel');
+
+$routes->post('addtoscore', 'Leaderboard::addtoscore');
+
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
 $routes->get('/', 'Quiz::index');
@@ -48,8 +55,6 @@ $routes->get('answerquestion', 'Quiz::answerquestion');
 $routes->get('answerquestion/(:any)', 'Quiz::answerquestion/$1');
 // api call status - optional call to check status
 $routes->get('status', 'Quiz::status');
-// api call to get challenge leader-board
-$routes->get('getleaderboard', 'Leaderboard::getleaderboard');
 //api call to get quiz high scores
 $routes->get('gethighscores', 'Quiz::gethighscores');
 $routes->get('gethighscores/(:any)', 'Quiz::gethighscores/$1');
@@ -74,7 +79,13 @@ $routes->get('quest/getriddle', 'Quest::getriddle');
 $routes->get('quest/solveriddle', 'Quest::solveriddle');
 $routes->get('quest/solveriddle/(:any)', 'Quest::solveriddle/$1');
 
+$routes->get('quest/submitlocation/(:any)', 'Quest::submitlocation/$1');
+
 $routes->get('quest/endquest', 'Quest::endquest');
+
+$routes->get('quest/activequests', 'Quest::activequests');
+
+$routes->get('quest/getclue', 'Quest::getclue');
 /*
  * --------------------------------------------------------------------
  * Additional Routing
