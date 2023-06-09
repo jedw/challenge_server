@@ -7,6 +7,6 @@ class LeaderboardModel extends Model
 {
     protected $table = 'leaderboard';
     protected $primarykey = 'id';
-    protected $allowedfields = ['id', 'teamcode', 'teamname', 'score'];
+    protected $allowedFields  = ['id', 'teamcode', 'teamname', 'score'];
     protected $returnType = 'array';
 }
